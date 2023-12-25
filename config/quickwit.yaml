@@ -1,0 +1,6 @@
+version: 0.6
+
+# listen_address: 127.0.0.1
+# rest_listen_port: 7280
+
+# data_dir: ./qwdata
