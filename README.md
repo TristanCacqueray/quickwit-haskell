@@ -3,6 +3,7 @@
 Haskell libraries for the [quickwit](https://quickwit.io) search engine.
 
 - [quickwit-client](./quickwit-client): API client
+- [log-quickwit](./log-quickwit): log-base backend
 
 ## Usage
 

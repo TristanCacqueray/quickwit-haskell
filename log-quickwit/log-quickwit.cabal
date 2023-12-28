@@ -1,0 +1,53 @@
+cabal-version:   3.0
+name:            log-quickwit
+version:         0.1
+synopsis:        tbd
+description:     tbd.
+category:        Data
+author:          Tristan Cacqueray
+maintainer:      tdecacqu@redhat.com
+license:         Apache-2.0
+license-file:    LICENSE
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+source-repository head
+  type:     git
+  location: https://github.com/change-metrics/quickwit-haskell
+
+common common
+  build-depends:      base <5
+  default-language:   GHC2021
+  ghc-options:
+    -Wall -fwarn-incomplete-uni-patterns -Wno-partial-type-signatures
+    -fwrite-ide-info -Wno-missing-methods -threaded
+
+  default-extensions:
+    BlockArguments
+    ImportQualifiedPost
+    LambdaCase
+    OverloadedRecordDot
+    OverloadedStrings
+    PartialTypeSignatures
+    StrictData
+    ViewPatterns
+    DerivingStrategies
+    QuasiQuotes
+
+library
+  import:          common
+  hs-source-dirs:  src
+  exposed-modules:
+    Log.Backend.Quickwit
+
+  build-depends:
+    , aeson
+    , async
+    , binary
+    , bytestring
+    , text
+    , vector
+    , quickwit-client
+    , stm
+    , log-base
+    , unliftio-core

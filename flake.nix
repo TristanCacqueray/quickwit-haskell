@@ -33,9 +33,11 @@
 
       # The haskell package set override
       haskellExtend = hpFinal: hpPrev: {
-        # Add the local library
+        # Add the local libraries
         quickwit-client =
           hpPrev.callCabal2nix "quickwit-client" ./quickwit-client { };
+        log-quickwit =
+          hpPrev.callCabal2nix "log-quickwit" ./log-quickwit { };
 
         # Bump http2 to the latest version
         http2 = let
@@ -66,7 +68,7 @@
     in {
       packages.x86_64-linux.default = quickwit;
       devShell.x86_64-linux = hsPkgs.shellFor {
-        packages = p: [ p.quickwit-client ];
+        packages = p: [ p.quickwit-client p.log-quickwit ];
         buildInputs = ciTools ++ devTools;
       };
     };
