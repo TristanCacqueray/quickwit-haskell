@@ -1,10 +1,11 @@
 {-# LANGUAGE TemplateHaskellQuotes #-}
+
 module Quickwit.Quotes (index, field) where
 
-import Quickwit.Mapping
-import Quickwit.Index
 import Data.Text qualified as T
 import QQLiterals (QuasiQuoter, qqLiteral)
+import Quickwit.Index
+import Quickwit.Mapping
 
 eitherMkIndex :: String -> Either String IndexID
 eitherMkIndex str = maybe (Left ("Failed to parse IndexID: " ++ str)) Right (mkIndexID (T.pack str))

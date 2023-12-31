@@ -21,7 +21,6 @@ import Control.Monad.Trans.Except (ExceptT (..), runExceptT)
 import Data.Aeson (FromJSON, ToJSON, eitherDecode, encode)
 import Data.Bifunctor (first)
 import Data.Binary.Builder as Builder
-import Data.ByteString qualified as BS
 import Data.ByteString.Char8 qualified as C8
 import Data.ByteString.Lazy (LazyByteString)
 import Data.ByteString.Lazy qualified as LBS

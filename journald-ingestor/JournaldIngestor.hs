@@ -1,4 +1,4 @@
-module JournaldIngestor where
+module Main where
 
 import Pipes qualified as P
 import Pipes.Safe qualified as P

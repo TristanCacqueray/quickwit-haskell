@@ -46,8 +46,8 @@ instance FromJSON FieldMapping where
             <*> obj .:? "description"
             <*> obj .: "type"
             <*> pure (filter removeKeys $ KM.toList obj)
-     where
-       removeKeys (k, _v) = k `notElem` ["name", "description", "type"]
+      where
+        removeKeys (k, _v) = k `notElem` ["name", "description", "type"]
 
 data DynamicMapping = TODO
     deriving (Show, Ord, Eq)

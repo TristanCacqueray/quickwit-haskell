@@ -3,17 +3,17 @@ module Log.Backend.Quickwit (
     QuickwitConfig (..),
     withQuickwitLogger,
 
-    -- * create the index
-    ensureIndex,
+    -- * example
+    demo,
 ) where
 
 import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async (AsyncCancelled (..), race)
 import Control.Concurrent.MVar
 import Control.Exception (Handler (..), SomeException, catches)
-import Control.Monad (forever, void)
+import Control.Monad (forever)
 import Control.Monad.IO.Unlift (MonadUnliftIO (withRunInIO))
-import Data.Aeson (encode, object, (.=))
+import Data.Aeson (object, (.=))
 import Data.Aeson.Types (Pair)
 import Data.ByteString qualified as BS
 import Data.ByteString.Lazy qualified as LBS
@@ -148,7 +148,6 @@ ensureIndex client = do
         Left (Q.ApiError _ (LBS.toStrict -> bs)) | "already exists" `BS.isInfixOf` bs -> pure ()
         Left err -> error (show err)
         Right _ -> pure ()
-    putStrLn "ensure index done"
   where
     timestamp = [Q.field|time|]
     mkEnumText f = Q.FieldMapping f Nothing "text" []
@@ -168,7 +167,7 @@ demo = do
     withStdOutLogger $ \stdoutLogger -> do
         let conf = QuickwitConfig Q.local $ Just stdoutLogger
         withQuickwitLogger conf \qlogger -> do
-            L.runLogT "main" (qlogger) L.defaultLogLevel do
+            L.runLogT "main" qlogger L.defaultLogLevel do
                 L.logInfo_ "let's go!"
                 L.logInfo "a message" $ object ["test" .= True]
                 L.logInfo_ "last message"

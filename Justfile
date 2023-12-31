@@ -1,3 +1,14 @@
 
 journald:
-  ghcid --command "cabal repl journald-ingestor" --test JournaldIngestor.main -W
+  ghcid --command "cabal repl journald-ingestor" --test Main.main -W
+
+ci: build format lint
+
+build:
+  cabal build -O0 all --ghc-options=-Werror
+
+lint:
+  hlint -XQuasiQuotes journald-ingestor log-quickwit quickwit-client
+
+format:
+  fourmolu -i .

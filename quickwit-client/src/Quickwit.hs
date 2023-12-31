@@ -35,9 +35,7 @@ import Data.Aeson (FromJSON (..), ToJSON (..), Value, encode, object, withObject
 import Data.ByteString (ByteString)
 import Data.ByteString.Lazy qualified as LBS
 import Data.Int (Int64)
-import Data.Maybe
 import Data.Text (Text)
-import Data.Text qualified as T
 import Data.Text.Encoding (encodeUtf8)
 import Data.Vector (Vector)
 import Data.Vector qualified as V

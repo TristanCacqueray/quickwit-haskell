@@ -60,7 +60,12 @@
       };
       hsPkgs = pkgs.haskellPackages.extend haskellExtend;
 
-      ciTools = [ quickwit pkgs.cabal-install pkgs.haskellPackages.fourmolu ];
+      ciTools = [
+        quickwit
+        pkgs.cabal-install
+        pkgs.haskellPackages.fourmolu
+        pkgs.hlint
+      ];
       devTools = [
         pkgs.haskell-language-server
         pkgs.ghcid

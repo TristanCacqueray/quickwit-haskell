@@ -1,7 +1,7 @@
 module Quickwit.Index where
 
-import Data.Text (Text)
 import Data.Aeson (FromJSON, ToJSON)
+import Data.Text (Text)
 
 newtype IndexID = IndexID Text
     deriving newtype (FromJSON, ToJSON, Show, Ord, Eq)
