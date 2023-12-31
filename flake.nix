@@ -65,6 +65,7 @@
         pkgs.haskell-language-server
         pkgs.ghcid
         pkgs.haskellPackages.cabal-fmt
+        pkgs.just
       ];
     in {
       packages.x86_64-linux.default = quickwit;
