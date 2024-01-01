@@ -1,6 +1,5 @@
 module Main where
 
-import Control.Concurrent (threadDelay)
 import Data.Aeson (ToJSON, Value, encode)
 import Data.ByteString.Lazy (toStrict)
 import Data.Generics.Labels ()
@@ -35,9 +34,10 @@ buildUI ::
     WidgetNode AppModel AppEvent
 buildUI _wenv model = keystroke [("Esc", AppQuit), ("Enter", AppUpdate)] widgetTree
   where
-    widgetTree = vstack [searchBar, searchResult] `styleBasic` [padding 10]
-    searchBar = hstack [label "Search", spacer, textField #search]
-    searchResult = vstack $ map label model.results
+    widgetTree = vstack [searchBar, searchResult]
+    searchBar = hstack [label "Search", spacer, textField #search] `styleBasic` [padding 10]
+    searchResult = vscroll_ [] $ vstack $ map resultRow model.results
+    resultRow result = label_ result [multiline] `styleBasic` [paddingB 2]
 
 handleEvent ::
     WidgetEnv AppModel AppEvent ->
@@ -45,7 +45,7 @@ handleEvent ::
     AppModel ->
     AppEvent ->
     [AppEventResponse AppModel AppEvent]
-handleEvent wenv node model evt = case evt of
+handleEvent _wenv _node model evt = case evt of
     AppInit -> [Task fetchResult]
     AppQuit -> [exitApplication]
     AppUpdate | not model.fetching -> [Model (model{fetching = True}), Task fetchResult]
