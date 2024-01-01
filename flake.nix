@@ -39,6 +39,7 @@
         log-quickwit = hpPrev.callCabal2nix "log-quickwit" ./log-quickwit { };
         journald-ingestor =
           hpPrev.callCabal2nix "journald-ingestor" ./journald-ingestor { };
+        quickwit-ui = hpPrev.callCabal2nix "quickwit-ui" ./quickwit-ui { };
 
         # Bump http2 to the latest version
         http2 = let
@@ -75,8 +76,14 @@
     in {
       packages.x86_64-linux.default = quickwit;
       devShell.x86_64-linux = hsPkgs.shellFor {
-        packages = p: [ p.quickwit-client p.log-quickwit p.journald-ingestor ];
+        packages = p: [
+          p.quickwit-client
+          p.log-quickwit
+          p.journald-ingestor
+          p.quickwit-ui
+        ];
         buildInputs = ciTools ++ devTools;
+        ROBOTO_TTF = "${pkgs.roboto}/share/fonts/truetype/Roboto-Regular.ttf";
       };
     };
 }

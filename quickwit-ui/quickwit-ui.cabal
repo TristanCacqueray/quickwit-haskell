@@ -1,0 +1,61 @@
+cabal-version:   3.0
+name:            quickwit-ui
+version:         0.1
+synopsis:        tbd
+description:     tbd.
+category:        Data
+author:          Tristan Cacqueray
+maintainer:      tdecacqu@redhat.com
+license:         Apache-2.0
+license-file:    LICENSE
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+source-repository head
+  type:     git
+  location: https://github.com/change-metrics/quickwit-haskell
+
+common executable
+  ghc-options: -threaded -rtsopts -with-rtsopts=-T
+
+common common
+  build-depends:      base <5
+  default-language:   GHC2021
+  ghc-options:
+    -Wall -fwarn-incomplete-uni-patterns -Wno-partial-type-signatures
+    -fwrite-ide-info -Wno-missing-methods
+
+  default-extensions:
+    BlockArguments
+    ImportQualifiedPost
+    LambdaCase
+    OverloadedRecordDot
+    OverloadedStrings
+    PartialTypeSignatures
+    StrictData
+    ViewPatterns
+    DerivingStrategies
+    QuasiQuotes
+    OverloadedLabels
+
+executable quickwit-ui
+  import:         common, executable
+  hs-source-dirs: .
+  main-is:        QuickwitUI.hs
+  build-depends:
+    , aeson
+    , async
+    , binary
+    , bytestring
+    , text
+    , vector
+    , stm
+    , unordered-containers
+
+    , quickwit-client
+
+    , monomer
+    , lens
+    , generic-lens
+    , lens-aeson
+    , text-show
