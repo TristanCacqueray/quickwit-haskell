@@ -12,7 +12,8 @@ module Quickwit (
     -- * Search API
     SearchQuery (..),
     SearchResponse (..),
-    searchData,
+    searchDataList,
+    searchDataVector,
 
     -- * Index API
     IndexID,
@@ -142,24 +143,30 @@ instance ToJSON SearchQuery where
             ["query" .= sq.query, "format" .= ("json" :: Text)]
                 <> maybe [] (\v -> ["start_timestamp" .= v]) sq.start_timestamp
 
-data SearchResponse a = SearchResponse
-    { hits :: Vector a
+data SearchResponse f a = SearchResponse
+    { hits :: f a
     , num_hits :: Word
     , elapsed_time_micros :: Word
     }
     deriving (Show)
 
-instance (FromJSON a) => FromJSON (SearchResponse a) where
+instance (FromJSON a, FromJSON (f a)) => FromJSON (SearchResponse f a) where
     parseJSON = withObject "SearchResponse" \obj ->
         SearchResponse
             <$> obj .: "hits"
             <*> obj .: "num_hits"
             <*> obj .: "elapsed_time_micros"
 
-searchData :: (FromJSON a) => APIClient -> IndexID -> SearchQuery -> QIO (SearchResponse a)
+searchData :: (FromJSON a, FromJSON (f a)) => APIClient -> IndexID -> SearchQuery -> QIO (SearchResponse f a)
 searchData client indexID body = readJSON client req
   where
     req = requestJSON methodPost (searchPath indexID) [] body
+
+searchDataList :: (FromJSON a) => APIClient -> IndexID -> SearchQuery -> QIO (SearchResponse [] a)
+searchDataList = searchData
+
+searchDataVector :: (FromJSON a) => APIClient -> IndexID -> SearchQuery -> QIO (SearchResponse Vector a)
+searchDataVector = searchData
 
 demo :: IO ()
 demo =
@@ -189,7 +196,7 @@ demo =
 
         putStrLn "\n[+] Searching"
         let query = SearchQuery "*" Nothing
-        print =<< searchData @Value client indexID query
+        print =<< searchDataList @Value client indexID query
 
 local :: Endpoint
 local = ("127.0.0.1", 7280)

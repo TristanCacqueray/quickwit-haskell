@@ -5,7 +5,6 @@ import Data.ByteString.Lazy (toStrict)
 import Data.Generics.Labels ()
 import Data.Text (Text, pack)
 import Data.Text.Encoding (decodeUtf8)
-import Data.Vector qualified as V
 import GHC.Generics (Generic)
 import Monomer
 import Quickwit qualified as Q
@@ -56,10 +55,10 @@ handleEvent _wenv _node model evt = case evt of
     encodeJSON = decodeUtf8 . toStrict . encode
     fetchResult :: IO AppEvent
     fetchResult = Q.withAPIClient Q.local \client -> do
-        eResp <- Q.searchData client [Q.index|log-base|] $ Q.SearchQuery model.search Nothing
+        eResp <- Q.searchDataList client [Q.index|log-base|] $ Q.SearchQuery model.search Nothing
         pure $ AppDisplay $ case eResp of
             Left err -> [pack (show err)]
-            Right resp -> V.toList $ encodeJSON @Value <$> resp.hits
+            Right resp -> encodeJSON @Value <$> resp.hits
 
 main :: IO ()
 main = do
