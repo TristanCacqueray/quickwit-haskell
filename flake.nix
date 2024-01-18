@@ -40,24 +40,12 @@
         journald-ingestor =
           hpPrev.callCabal2nix "journald-ingestor" ./journald-ingestor { };
         quickwit-ui = hpPrev.callCabal2nix "quickwit-ui" ./quickwit-ui { };
+        quickwit-web = hpPrev.callCabal2nix "quickwit-web" ./quickwit-web { };
 
         # Bump http2 to the latest version
-        http2 = let
-          src = pkgs.fetchFromGitHub {
-            owner = "kazu-yamamoto";
-            repo = "http2";
-            rev = "v5.0.0";
-            sha256 = "sha256-Yf8XO8UQAME8xdPHb3XV01UcAlp2P6f55hOacqLpUpA=";
-          };
-        in hpPrev.callCabal2nix "http2" src { };
-        network-control = let
-          src = pkgs.fetchFromGitHub {
-            owner = "kazu-yamamoto";
-            repo = "network-control";
-            rev = "6fdc7a30bacb18287db3f4be54d5f4ef77a1af31";
-            sha256 = "sha256-wgkbs05s4u4+mAFIH6lKflgIZ/jKxVxIqejUIq/uf0Y=";
-          };
-        in hpPrev.callCabal2nix "network-control" src { };
+        http2 = hpPrev.http2_5_0_0;
+        # Warp build fails because of a missing command in the test depends
+        warp = pkgs.haskell.lib.dontCheck hpPrev.warp_3_3_31;
       };
       hsPkgs = pkgs.haskellPackages.extend haskellExtend;
 
@@ -81,6 +69,7 @@
           p.log-quickwit
           p.journald-ingestor
           p.quickwit-ui
+          p.quickwit-web
         ];
         buildInputs = ciTools ++ devTools;
         ROBOTO_TTF = "${pkgs.roboto}/share/fonts/truetype/Roboto-Regular.ttf";
